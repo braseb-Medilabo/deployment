@@ -1,0 +1,88 @@
+services:
+  infos-patient:
+    build:
+      context: ../infosPatients
+    image: infos-medilabo
+    environment:
+      URL_BDD: jdbc:postgresql://db_pg:5432/medilabo
+      USERNAME_BDD: admin
+      PASSWORD_BDD: password
+      API_SERVER_GATEWAY_URL: http://localhost:8080/api/v1
+    networks:
+      - medilabo
+      - bdd
+
+  notes-patient:
+    build:
+      context: ../notesPatients
+    image: notes-medilabo
+    environment:
+      HOST_MONGO_BDD: mongodb
+      PORT_MONGO_BDD: 27017
+      DATABASE_MONGO_BDD: patient
+      API_SERVER_GATEWAY_URL: http://localhost:8080/api/v1
+    networks:
+      - medilabo
+      - bdd
+
+  risk-patient:
+    build:
+      context: ../risqueDiabetePatients
+    image: risk-medilabo
+    environment:
+      URL_BDD: jdbc:postgresql://db_pg_diabete_risk:5432/medilabo-diabete-risk
+      SERVICE_INFOS_PATIENT_URL: http://infos-patient:8080/patient
+      SERVICE_NOTES_PATIENT_URL: http://notes-patient:8080/patient/note
+      USERNAME_BDD: admin
+      PASSWORD_BDD: password
+      API_SERVER_GATEWAY_URL: http://localhost:8080/api/v1
+    networks:
+      - medilabo
+      - bdd
+
+  gateway:
+    build:
+      context: ../cloudGateway
+    image: gateway-medilabo
+    ports:
+      - "8080:8080"
+    environment:
+      API_PREFIX: /api/v1
+      JWT_SECRET: UneCleTresLonguePourHS256DoitFaireAuMoins32Caracteres
+      SERVICE_INFOS_PATIENT_URL: http://infos-patient:8080
+      SERVICE_NOTES_PATIENT_URL: http://notes-patient:8080
+      SERVICE_DIABETES_RISK_PATIENT_URL: http://risk-patient:8080
+      FRONTEND_URL: http://localhost:9080
+      SWAGGER_SERVICE_INFOS_PATIENT_NAME: infosPatient
+      SWAGGER_SERVICE_INFOS_PATIENT_URL: /api/v1/patient/v3/api-docs
+      SWAGGER_SERVICE_NOTES_PATIENT_NAME: notesPatient
+      SWAGGER_SERVICE_NOTES_PATIENT_URL: /api/v1/patient/note/v3/api-docs
+      SWAGGER_SERVICE_DIABETES_RISK_PATIENT_NAME: riskPatient
+      SWAGGER_SERVICE_DIABETES_RISK_PATIENT_URL: /api/v1/patient/risk/v3/api-docs
+      SWAGGER_SERVICE_GATEWAY_NAME: gateway
+      SWAGGER_SERVICE_GATEWAY_URL: /v3/api-docs
+    networks:
+      - medilabo
+      - bdd
+    
+  frontend:
+    build:
+      context: ../front-medilabo
+    image: front-medilabo
+    ports:
+      - "9080:80"
+    environment:
+      API_URL: http://gateway:8080/api/v1
+
+    networks:
+      - medilabo
+      - bdd
+
+networks:
+  medilabo:
+
+  bdd:
+    external: true
+    name: postgresql_projet9_default
+
+  
