@@ -16,7 +16,7 @@
     <junit.version>5.11.3</junit.version>
     <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>3.6.0-M1</maven-failsafe-plugin.version>
-    <testcontainers.version>1.21.4</testcontainers.version>
+    <testcontainers.version>2.0.5</testcontainers.version>
     <rest-assured.version>5.5.0</rest-assured.version>
     <slf4j-simple.version>2.0.18</slf4j-simple.version>
     <slf4j-api.version>2.0.18</slf4j-api.version>
@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>testcontainers-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

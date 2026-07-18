@@ -21,8 +21,7 @@ class GatewayIT {
     static ComposeContainer environment =
             new ComposeContainer(new File("../docker-compose.test.yml"))
                     .withExposedService("gateway", 8080,
-                            Wait.forListeningPort().withStartupTimeout(Duration.ofMinutes(3)))
-                    .withLocalCompose(true);
+                            Wait.forListeningPort().withStartupTimeout(Duration.ofMinutes(3)));
 
     static String baseUrl;
     static String accessToken;
