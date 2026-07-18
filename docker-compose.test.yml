@@ -1,0 +1,88 @@
+services:
+  db_pg:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: medilabo
+    networks:
+      - medilabo
+
+  db_pg_diabete_risk:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: medilabo-diabete-risk
+    networks:
+      - medilabo
+
+  mongodb:
+    image: mongo:7
+    networks:
+      - medilabo
+
+  infos-patient:
+    build:
+      context: ../infosPatients
+    depends_on:
+      - db_pg
+    environment:
+      URL_BDD: jdbc:postgresql://db_pg:5432/medilabo
+      USERNAME_BDD: admin
+      PASSWORD_BDD: password
+      API_SERVER_GATEWAY_URL: http://gateway:8080/api/v1
+    networks:
+      - medilabo
+
+  notes-patient:
+    build:
+      context: ../notesPatients
+    depends_on:
+      - mongodb
+    environment:
+      HOST_MONGO_BDD: mongodb
+      PORT_MONGO_BDD: 27017
+      DATABASE_MONGO_BDD: patient
+      API_SERVER_GATEWAY_URL: http://gateway:8080/api/v1
+    networks:
+      - medilabo
+
+  risk-patient:
+    build:
+      context: ../risqueDiabetePatients
+    depends_on:
+      - db_pg_diabete_risk
+      - infos-patient
+      - notes-patient
+    environment:
+      URL_BDD: jdbc:postgresql://db_pg_diabete_risk:5432/medilabo-diabete-risk
+      SERVICE_INFOS_PATIENT_URL: http://infos-patient:8080/patient
+      SERVICE_NOTES_PATIENT_URL: http://notes-patient:8080/patient/note
+      USERNAME_BDD: admin
+      PASSWORD_BDD: password
+      API_SERVER_GATEWAY_URL: http://gateway:8080/api/v1
+    networks:
+      - medilabo
+
+  gateway:
+    build:
+      context: ../cloudGateway
+    depends_on:
+      - infos-patient
+      - notes-patient
+      - risk-patient
+    ports:
+      - "8080"
+    environment:
+      API_PREFIX: /api/v1
+      JWT_SECRET: UneCleTresLonguePourHS256DoitFaireAuMoins32Caracteres
+      SERVICE_INFOS_PATIENT_URL: http://infos-patient:8080
+      SERVICE_NOTES_PATIENT_URL: http://notes-patient:8080
+      SERVICE_DIABETES_RISK_PATIENT_URL: http://risk-patient:8080
+      FRONTEND_URL: http://localhost:9080
+    networks:
+      - medilabo
+
+networks:
+  medilabo:
