@@ -97,6 +97,23 @@ services:
       FRONTEND_URL: http://localhost:9081
     networks:
       - medilabo
+      
+  front:
+    image: ghcr.io/braseb-medilabo/front-end:${GATEWAY_VERSION}
+    container_name: front-medilabo
+    restart: unless-stopped
+    pull_policy: always
+    depends_on:
+      - infos-patient
+      - notes-patient
+      - risk-patient
+      - gateway
+    ports:
+      - "9081:80"
+    environment:
+      API_URL: http://localhost:9080/api/v1
+    networks:
+      - medilabo
 
 networks:
   medilabo:
