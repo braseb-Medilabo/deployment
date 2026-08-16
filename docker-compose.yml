@@ -99,7 +99,7 @@ services:
       - medilabo
       
   front:
-    image: ghcr.io/braseb-medilabo/front-end:${GATEWAY_VERSION}
+    image: ghcr.io/braseb-medilabo/front-end:${FRONT_VERSION}
     container_name: front-medilabo
     restart: unless-stopped
     pull_policy: always
