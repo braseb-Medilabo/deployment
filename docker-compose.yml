@@ -1,6 +1,7 @@
 services:
   db_pg:
     image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
@@ -10,6 +11,7 @@ services:
 
   db_pg_diabete_risk:
     image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
@@ -19,12 +21,14 @@ services:
 
   mongodb:
     image: mongo:7.0
+    restart: unless-stopped
     networks:
       - medilabo
 
   infos-patient:
     image: ghcr.io/braseb-medilabo/patient-info-backend:${INFO_PATIENT_VERSION}
     container_name: infos-medilabo
+    restart: unless-stopped
     pull_policy: always
     depends_on:
       - db_pg
@@ -40,6 +44,7 @@ services:
   notes-patient:
     image: ghcr.io/braseb-medilabo/patient-note-backend:${NOTE_PATIENT_VERSION}
     container_name: notes-patient
+    restart: unless-stopped
     pull_policy: always
     depends_on:
       - mongodb
@@ -55,6 +60,7 @@ services:
   risk-patient:
     image: ghcr.io/braseb-medilabo/patient-risque-diabete-backend:${RISK_PATIENT_VERSION}
     container_name: risk-patient
+    restart: unless-stopped
     pull_policy: always
     depends_on:
       - db_pg_diabete_risk
@@ -74,6 +80,7 @@ services:
   gateway:
     image: ghcr.io/braseb-medilabo/gateway:${GATEWAY_VERSION}
     container_name: gateway
+    restart: unless-stopped
     pull_policy: always
     depends_on:
       - infos-patient
