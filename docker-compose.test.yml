@@ -72,7 +72,7 @@ services:
       - notes-patient
       - risk-patient
     ports:
-      - "8080"
+      - "9080:8080"
     environment:
       API_PREFIX: /api/v1
       JWT_SECRET: UneCleTresLonguePourHS256DoitFaireAuMoins32Caracteres
