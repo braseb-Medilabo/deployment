@@ -20,7 +20,7 @@ class GatewayIT {
     @SuppressWarnings("resource")
     static ComposeContainer environment =
             new ComposeContainer(new File("../docker-compose.test.yml"))
-                    .withExposedService("gateway", 9080,
+                    .withExposedService("gateway", 8080,
                             Wait.forListeningPort().withStartupTimeout(Duration.ofMinutes(3)));
 
     static String baseUrl;
@@ -30,8 +30,8 @@ class GatewayIT {
     static void setup() {
         environment.start();
 
-        String host = environment.getServiceHost("gateway", 9080);
-        Integer port = environment.getServicePort("gateway", 9080);
+        String host = environment.getServiceHost("gateway", 8080);
+        Integer port = environment.getServicePort("gateway", 8080);
         baseUrl = "http://" + host + ":" + port + "/api/v1";
         System.out.println("Gateway disponible sur : " + baseUrl);
 
