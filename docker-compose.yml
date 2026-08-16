@@ -18,12 +18,12 @@ services:
       - medilabo
 
   mongodb:
-    image: mongo:7
+    image: mongo:7.0
     networks:
       - medilabo
 
   infos-patient:
-    image: ghcr.io/braseb-medilabo/patient-info-backend:latest
+    image: ghcr.io/braseb-medilabo/patient-info-backend:${INFO_PATIENT_VERSION}
     container_name: infos-medilabo
     pull_policy: always
     depends_on:
@@ -38,7 +38,7 @@ services:
       - medilabo
 
   notes-patient:
-    image: ghcr.io/braseb-medilabo/patient-note-backend:latest
+    image: ghcr.io/braseb-medilabo/patient-note-backend:${NOTE_PATIENT_VERSION}
     container_name: notes-patient
     pull_policy: always
     depends_on:
@@ -53,7 +53,7 @@ services:
       - medilabo
 
   risk-patient:
-    image: ghcr.io/braseb-medilabo/patient-risque-diabete-backend:latest
+    image: ghcr.io/braseb-medilabo/patient-risque-diabete-backend:${RISK_PATIENT_VERSION}
     container_name: risk-patient
     pull_policy: always
     depends_on:
@@ -72,7 +72,7 @@ services:
       - medilabo
 
   gateway:
-    image: ghcr.io/braseb-medilabo/gateway:latest
+    image: ghcr.io/braseb-medilabo/gateway:${GATEWAY_VERSION}
     container_name: gateway
     pull_policy: always
     depends_on:

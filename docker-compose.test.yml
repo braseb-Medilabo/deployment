@@ -23,8 +23,8 @@ services:
       - medilabo
 
   infos-patient:
-    build:
-      context: ../infosPatients
+    image: ghcr.io/braseb-medilabo/patient-info-backend:${INFO_PATIENT_VERSION}
+    container_name: infos-medilabo
     depends_on:
       - db_pg
     environment:
@@ -36,8 +36,8 @@ services:
       - medilabo
 
   notes-patient:
-    build:
-      context: ../notesPatients
+    image: ghcr.io/braseb-medilabo/patient-note-backend:${NOTE_PATIENT_VERSION}
+    container_name: notes-patient
     depends_on:
       - mongodb
     environment:
@@ -49,8 +49,8 @@ services:
       - medilabo
 
   risk-patient:
-    build:
-      context: ../risqueDiabetePatients
+    image: ghcr.io/braseb-medilabo/patient-risque-diabete-backend:${RISK_PATIENT_VERSION}
+    container_name: risk-patient
     depends_on:
       - db_pg_diabete_risk
       - infos-patient
@@ -66,8 +66,8 @@ services:
       - medilabo
 
   gateway:
-    build:
-      context: ../cloudGateway
+    image: ghcr.io/braseb-medilabo/gateway:${GATEWAY_VERSION}
+    container_name: gateway
     depends_on:
       - infos-patient
       - notes-patient
