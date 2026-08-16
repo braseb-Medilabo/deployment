@@ -30,7 +30,8 @@ services:
       URL_BDD: jdbc:postgresql://db_pg:5432/medilabo
       USERNAME_BDD: admin
       PASSWORD_BDD: password
-      API_SERVER_GATEWAY_URL: http://gateway:8080/api/v1
+      API_SERVER_GATEWAY_URL: http://gateway:8080
+      API_GATEWAY_PREFIX: /api/v1
     networks:
       - medilabo
 
@@ -42,7 +43,8 @@ services:
       HOST_MONGO_BDD: mongodb
       PORT_MONGO_BDD: 27017
       DATABASE_MONGO_BDD: patient
-      API_SERVER_GATEWAY_URL: http://gateway:8080/api/v1
+      API_SERVER_GATEWAY_URL: http://gateway:8080
+      API_GATEWAY_PREFIX: /api/v1
     networks:
       - medilabo
 
@@ -58,7 +60,8 @@ services:
       SERVICE_NOTES_PATIENT_URL: http://notes-patient:8080/patient/note
       USERNAME_BDD: admin
       PASSWORD_BDD: password
-      API_SERVER_GATEWAY_URL: http://gateway:8080/api/v1
+      API_SERVER_GATEWAY_URL: http://gateway:8080
+      API_GATEWAY_PREFIX: /api/v1
     networks:
       - medilabo
 
@@ -76,7 +79,7 @@ services:
       SERVICE_INFOS_PATIENT_URL: http://infos-patient:8080
       SERVICE_NOTES_PATIENT_URL: http://notes-patient:8080
       SERVICE_DIABETES_RISK_PATIENT_URL: http://risk-patient:8080
-      FRONTEND_URL: http://localhost:9080
+      FRONTEND_URL: http://localhost:9081
     networks:
       - medilabo
 
