@@ -3,11 +3,9 @@ services:
     image: postgres:16
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${PG_USER}
-      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: medilabo
-    volumes:
-      - db_pg_data:/var/lib/postgresql/data
     networks:
       - medilabo
 
@@ -15,22 +13,15 @@ services:
     image: postgres:16
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${PG_USER}
-      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: medilabo-diabete-risk
-    volumes:
-      - db_pg_diabete_risk_data:/var/lib/postgresql/data
     networks:
       - medilabo
 
   mongodb:
     image: mongo:7.0
     restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-    volumes:
-      - mongo_data:/data/db
     networks:
       - medilabo
 
@@ -38,13 +29,14 @@ services:
     image: ghcr.io/braseb-medilabo/patient-info-backend:${INFO_PATIENT_VERSION}
     container_name: infos-medilabo
     restart: unless-stopped
+    pull_policy: always
     depends_on:
       - db_pg
     environment:
       URL_BDD: jdbc:postgresql://db_pg:5432/medilabo
-      USERNAME_BDD: ${PG_USER}
-      PASSWORD_BDD: ${PG_PASSWORD}
-      API_SERVER_GATEWAY_URL: ${API_SERVER_GATEWAY_URL}
+      USERNAME_BDD: admin
+      PASSWORD_BDD: password
+      API_SERVER_GATEWAY_URL: http://localhost:9080
       API_GATEWAY_PREFIX: /api/v1
     networks:
       - medilabo
@@ -53,15 +45,14 @@ services:
     image: ghcr.io/braseb-medilabo/patient-note-backend:${NOTE_PATIENT_VERSION}
     container_name: notes-patient
     restart: unless-stopped
+    pull_policy: always
     depends_on:
       - mongodb
     environment:
       HOST_MONGO_BDD: mongodb
       PORT_MONGO_BDD: 27017
       DATABASE_MONGO_BDD: patient
-      MONGO_USER: ${MONGO_USER}
-      MONGO_PASSWORD: ${MONGO_PASSWORD}
-      API_SERVER_GATEWAY_URL: ${API_SERVER_GATEWAY_URL}
+      API_SERVER_GATEWAY_URL: http://localhost:9080
       API_GATEWAY_PREFIX: /api/v1
     networks:
       - medilabo
@@ -70,6 +61,7 @@ services:
     image: ghcr.io/braseb-medilabo/patient-risque-diabete-backend:${RISK_PATIENT_VERSION}
     container_name: risk-patient
     restart: unless-stopped
+    pull_policy: always
     depends_on:
       - db_pg_diabete_risk
       - infos-patient
@@ -78,9 +70,9 @@ services:
       URL_BDD: jdbc:postgresql://db_pg_diabete_risk:5432/medilabo-diabete-risk
       SERVICE_INFOS_PATIENT_URL: http://infos-patient:8080/patient
       SERVICE_NOTES_PATIENT_URL: http://notes-patient:8080/patient/note
-      USERNAME_BDD: ${PG_USER}
-      PASSWORD_BDD: ${PG_PASSWORD}
-      API_SERVER_GATEWAY_URL: ${API_SERVER_GATEWAY_URL}
+      USERNAME_BDD: admin
+      PASSWORD_BDD: password
+      API_SERVER_GATEWAY_URL: http://localhost:9080
       API_GATEWAY_PREFIX: /api/v1
     networks:
       - medilabo
@@ -89,6 +81,7 @@ services:
     image: ghcr.io/braseb-medilabo/gateway:${GATEWAY_VERSION}
     container_name: gateway
     restart: unless-stopped
+    pull_policy: always
     depends_on:
       - infos-patient
       - notes-patient
@@ -97,18 +90,19 @@ services:
       - "9080:8080"
     environment:
       API_PREFIX: /api/v1
-      JWT_SECRET: ${JWT_SECRET}
+      JWT_SECRET: UneCleTresLonguePourHS256DoitFaireAuMoins32Caracteres
       SERVICE_INFOS_PATIENT_URL: http://infos-patient:8080
       SERVICE_NOTES_PATIENT_URL: http://notes-patient:8080
       SERVICE_DIABETES_RISK_PATIENT_URL: http://risk-patient:8080
-      FRONTEND_URL: ${FRONTEND_URL}
+      FRONTEND_URL: http://localhost:9081
     networks:
       - medilabo
-
+      
   front:
     image: ghcr.io/braseb-medilabo/front-end:${FRONT_VERSION}
     container_name: front-medilabo
     restart: unless-stopped
+    pull_policy: always
     depends_on:
       - infos-patient
       - notes-patient
@@ -117,14 +111,9 @@ services:
     ports:
       - "9081:80"
     environment:
-      API_URL: ${API_URL}
+      API_URL: http://localhost:9080/api/v1
     networks:
       - medilabo
 
 networks:
   medilabo:
-
-volumes:
-  db_pg_data:
-  db_pg_diabete_risk_data:
-  mongo_data:
