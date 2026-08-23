@@ -19,6 +19,9 @@ services:
 
   mongodb:
     image: mongo:7.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     networks:
       - medilabo
 
@@ -45,6 +48,8 @@ services:
       DATABASE_MONGO_BDD: patient
       API_SERVER_GATEWAY_URL: http://gateway:8080
       API_GATEWAY_PREFIX: /api/v1
+      MONGO_USER: admin
+      MONGO_PASSWORD: password
     networks:
       - medilabo
 
