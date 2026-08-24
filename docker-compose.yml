@@ -118,6 +118,7 @@ services:
       - "9081:80"
     environment:
       API_URL: ${API_URL}
+      DEPLOYMENT_VERSION: ${DEPLOYMENT_VERSION}
     networks:
       - medilabo
 
