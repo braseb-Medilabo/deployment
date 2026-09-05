@@ -321,6 +321,33 @@ plutôt qu'avec un port fixe.
 
 Les tests sont réalisés au travers du Gateway afin de vérifier l'intégration des différents services.
 
+Ils utilisent les données de test fournies : 
+
+# Tableaux des patients
+
+### Informations sur les patients
+
+| Nom | Prénom | Date de naissance | Genre | Adresse | Téléphone |
+|---|---|---|---|---|---|
+| TestNone | Test | 1966-12-31 | F | 1 Brookside St | 100-222-3333 |
+| TestBorderline | Test | 1945-06-24 | M | 2 High St | 200-333-4444 |
+| TestInDanger | Test | 2004-06-18 | M | 3 Club Road | 300-444-5555 |
+| TestEarlyOnset | Test | 2002-06-28 | F | 4 Valley Dr | 400-555-6666 |
+
+### Notes des patients
+
+| patId | Patient | Note |
+|---:|---|---|
+| 1 | TestNone | Le patient déclare qu'il « se sent très bien » — Poids égal ou inférieur au poids recommandé |
+| 2 | TestBorderline | Le patient déclare qu'il ressent beaucoup de stress au travail. Il se plaint également que son audition est anormale dernièrement |
+| 2 | TestBorderline | Le patient déclare avoir fait une réaction aux médicaments au cours des 3 derniers mois. Il remarque également que son audition continue d'être anormale |
+| 3 | TestInDanger | Le patient déclare qu'il fume depuis peu |
+| 3 | TestInDanger | Le patient déclare qu'il est fumeur et qu'il a cessé de fumer l'année dernière. Il se plaint également de crises d’apnée respiratoire anormales. Tests de laboratoire indiquant un taux de cholestérol LDL élevé |
+| 4 | TestEarlyOnset | Le patient déclare qu'il lui est devenu difficile de monter les escaliers. Il se plaint également d’être essoufflé. Tests de laboratoire indiquant que les anticorps sont élevés. Réaction aux médicaments |
+| 4 | TestEarlyOnset | Le patient déclare qu'il a mal au dos lorsqu'il reste assis pendant longtemps |
+| 4 | TestEarlyOnset | Le patient déclare avoir commencé à fumer depuis peu. Hémoglobine A1C supérieure au niveau recommandé |
+| 4 | TestEarlyOnset | Taille, Poids, Cholestérol, Vertige et Réaction |
+
 ## Authentification
 
 Les tests vérifient notamment :
