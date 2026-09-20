@@ -405,50 +405,6 @@ Il constitue donc également une **référence de configuration** pour comprendr
 
 Contrairement au fichier de production, les valeurs présentes dans ce fichier peuvent être directement visibles afin de faciliter la compréhension et la démonstration.
 
-Les images sont récupérées depuis GHCR et utilisent :
-
-```yaml
-pull_policy: always
-```
-
-## Lancer la démonstration
-
-```bash
-docker compose -f docker-compose.demo.yml up -d
-```
-
-## Recréer les conteneurs
-
-```bash
-docker compose -f docker-compose.demo.yml up -d --force-recreate
-```
-
-## Arrêter
-
-```bash
-docker compose -f docker-compose.demo.yml down
-```
-
-## Accès
-
-Frontend :
-
-```text
-http://localhost:9081
-```
-
-Gateway :
-
-```text
-http://localhost:9080
-```
-
-API :
-
-```text
-http://localhost:9080/api/v1
-```
-
 ---
 
 # 🖥️ Déploiement local — `docker-compose.local.yml`
@@ -508,67 +464,6 @@ docker compose -f docker-compose.local.yml down
 
 ```bash
 docker compose -f docker-compose.local.yml down -v
-```
-
----
-
-# 🧪 Tests d'intégration locaux — `docker-compose.test.local.yml`
-
-Ce fichier permet de reproduire localement les tests d'intégration utilisés dans le pipeline Jenkins.
-
-Les images des services sont construites depuis les projets locaux.
-
-L'organisation attendue est la même que pour le déploiement local :
-
-```text
-MediLabo/
-├── cloudGateway/
-├── deployment/
-├── front-medilabo/
-├── infosPatients/
-├── notesPatients/
-└── risqueDiabetePatients/
-```
-
-Les tests peuvent ainsi être développés et validés localement avant leur exécution par Jenkins.
-
----
-
-# 🌐 Ports
-
-Les principaux ports exposés sont :
-
-| Service  | Port interne | Port hôte |
-| -------- | -----------: | --------: |
-| Gateway  |       `8080` |    `9080` |
-| Frontend |         `80` |    `9081` |
-
-Les autres services restent accessibles via le réseau Docker `medilabo`.
-
----
-
-# 🗄️ Persistance
-
-Le déploiement de production utilise les volumes suivants :
-
-```text
-db_pg_info_patient_data
-db_pg_diabete_risk_data
-mongo_note_patient_data
-```
-
-Ils permettent de conserver les données des bases lors des redémarrages et recréations de conteneurs.
-
-Pour afficher les volumes :
-
-```bash
-docker volume ls
-```
-
-Pour inspecter un volume :
-
-```bash
-docker volume inspect db_pg_info_patient_data
 ```
 
 ---
@@ -751,7 +646,6 @@ Le cycle de développement et de déploiement est le suivant :
 | Environnement | Fichier                         | Images      | Utilisation                       |
 | ------------- | ------------------------------- | ----------- | --------------------------------- |
 | Développement | `docker-compose.local.yml`      | Build local | Développement                     |
-| Tests locaux  | `docker-compose.test.local.yml` | Build local | Tests d'intégration               |
 | Démonstration | `docker-compose.demo.yml`       | GHCR        | Démo + référence de configuration |
 | CI Jenkins    | `docker-compose.test.yml`       | GHCR        | Validation avant production       |
 | Production    | `docker-compose.yml`            | GHCR        | Déploiement réel                  |
